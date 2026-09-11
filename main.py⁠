@@ -17,4 +17,24 @@ class Ogrenci:
             "final": self.final,
             "ortalama": round(self.ortalama, 2),
             "durum": self.durum
-        }
+        } class NotSistemi:
+    def __init__(self, dosya_adi="ogrenciler.json"):
+        self.dosya_adi = dosya_adi
+        self.ogrenciler = []
+        self.dosyadan_yukle()
+
+    def dosyadan_yukle(self):
+        try:
+            with open(self.dosya_adi, "r", encoding="utf-8") as f:
+                veriler = json.load(f)
+                self.ogrenciler = veriler
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.ogrenciler = []
+
+    def dosyaya_kaydet(self):
+        with open(self.dosya_adi, "w", encoding="utf-8") as f:
+            json.dump(self.ogrenciler, f, ensure_ascii=False, indent=4)
+
+
+
+
