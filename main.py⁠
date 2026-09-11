@@ -1,0 +1,20 @@
+import json
+
+class Ogrenci:
+    def __init__(self, no, ad, vize, final):
+        self.no = str(no)
+        self.ad = ad
+        self.vize = float(vize)
+        self.final = float(final)
+        self.ortalama = self.vize * 0.4 + self.final * 0.6
+        self.durum = "Geçti" if self.ortalama >= 50 else "Kaldı"
+
+    def to_dict(self):
+        return {
+            "no": self.no,
+            "ad": self.ad,
+            "vize": self.vize,
+            "final": self.final,
+            "ortalama": round(self.ortalama, 2),
+            "durum": self.durum
+        }
