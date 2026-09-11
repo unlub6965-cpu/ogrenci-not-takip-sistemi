@@ -17,7 +17,9 @@ class Ogrenci:
             "final": self.final,
             "ortalama": round(self.ortalama, 2),
             "durum": self.durum
-         class NotSistemi:
+        }
+
+class NotSistemi:
     def __init__(self, dosya_adi="ogrenciler.json"):
         self.dosya_adi = dosya_adi
         self.ogrenciler = []
@@ -26,27 +28,29 @@ class Ogrenci:
     def dosyadan_yukle(self):
         try:
             with open(self.dosya_adi, "r", encoding="utf-8") as f:
-                veriler = json.load(f)
-                self.ogrenciler = veriler
+                self.ogrenciler = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             self.ogrenciler = []
 
     def dosyaya_kaydet(self):
-        with open(self.dosya_adi, "w", encoding="utf-8") as f:
-            json.dump(self.ogrenciler, f, ensure_ascii=False, indent=4)
+        try:
+            with open(self.dosya_adi, "w", encoding="utf-8") as f:
+                json.dump(self.ogrenciler, f, ensure_ascii=False, indent=4)
+        except IOError as e:
+            print(f"Dosya kaydetme hatası: {e}")
 
     def ogrenci_ekle(self):
         no = input("Öğrenci Numarası: ").strip()
         ad = input("Öğrenci Adı Soyadı: ").strip()
         if not no or not ad:
-            print("Numara veya ad boş bırakılamaz!")
+            print("Hata: Numara veya ad boş bırakılamaz!")
             return
 
         try:
             vize = float(input("Vize Notu (0-100): "))
             final = float(input("Final Notu (0-100): "))
             if not (0 <= vize <= 100 and 0 <= final <= 100):
-                print("Notlar 0 ile 100 arasında olmalıdır.")
+                print("Hata: Notlar 0 ile 100 arasında olmalıdır!")
                 return
         except ValueError:
             print("Hata: Not alanlarına sadece sayısal değer girmelisiniz!")
@@ -55,7 +59,7 @@ class Ogrenci:
         yeni_ogr = Ogrenci(no, ad, vize, final)
         self.ogrenciler.append(yeni_ogr.to_dict())
         self.dosyaya_kaydet()
-        print(f"{ad} başarıyla eklendi.")
+        print(f"-> {ad} başarıyla sisteme eklendi.")
 
     def ogrencileri_listele(self):
         if not self.ogrenciler:
@@ -87,7 +91,7 @@ class Ogrenci:
 
     def rapor_goruntule(self):
         if not self.ogrenciler:
-            print("Rapor oluşturmak için veri yok.")
+            print("Rapor oluşturmak için yeterli veri yok.")
             return
         toplam = len(self.ogrenciler)
         gecenler = sum(1 for o in self.ogrenciler if o['durum'] == "Geçti")
@@ -131,5 +135,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+       
 
 
