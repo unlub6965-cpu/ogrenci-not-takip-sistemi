@@ -85,5 +85,51 @@ class Ogrenci:
         else:
             print("Bu numaraya ait öğrenci bulunamadı.")
 
+    def rapor_goruntule(self):
+        if not self.ogrenciler:
+            print("Rapor oluşturmak için veri yok.")
+            return
+        toplam = len(self.ogrenciler)
+        gecenler = sum(1 for o in self.ogrenciler if o['durum'] == "Geçti")
+        kalanlar = toplam - gecenler
+        sinif_ortalamasi = sum(o['ortalama'] for o in self.ogrenciler) / toplam
+
+        print("\n===== GENEL BAŞARI RAPORU =====")
+        print(f"Toplam Öğrenci Sayısı : {toplam}")
+        print(f"Geçen Sayısı          : {gecenler}")
+        print(f"Kalan Sayısı          : {kalanlar}")
+        print(f"Sınıf Not Ortalaması  : {sinif_ortalamasi:.2f}")
+        print("================================")
+
+def main():
+    sistem = NotSistemi()
+    while True:
+        print("\n--- ÖĞRENCİ NOT TAKİP SİSTEMİ ---")
+        print("1. Öğrenci Ekle")
+        print("2. Öğrencileri Listele")
+        print("3. Öğrenci Ara")
+        print("4. Öğrenci Sil")
+        print("5. Özet Başarı Raporu")
+        print("6. Çıkış")
+        secim = input("Seçiminiz (1-6): ").strip()
+
+        if secim == "1":
+            sistem.ogrenci_ekle()
+        elif secim == "2":
+            sistem.ogrencileri_listele()
+        elif secim == "3":
+            sistem.ogrenci_ara()
+        elif secim == "4":
+            sistem.ogrenci_sil()
+        elif secim == "5":
+            sistem.rapor_goruntule()
+        elif secim == "6":
+            print("Programdan çıkılıyor...")
+            break
+        else:
+            print("Geçersiz seçim! Lütfen 1-6 arasında bir değer girin.")
+
+if __name__ == "__main__":
+    main()
 
 
