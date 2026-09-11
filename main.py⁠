@@ -17,7 +17,7 @@ class Ogrenci:
             "final": self.final,
             "ortalama": round(self.ortalama, 2),
             "durum": self.durum
-        } class NotSistemi:
+         class NotSistemi:
     def __init__(self, dosya_adi="ogrenciler.json"):
         self.dosya_adi = dosya_adi
         self.ogrenciler = []
