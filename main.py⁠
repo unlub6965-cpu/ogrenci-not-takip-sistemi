@@ -35,6 +35,55 @@ class Ogrenci:
         with open(self.dosya_adi, "w", encoding="utf-8") as f:
             json.dump(self.ogrenciler, f, ensure_ascii=False, indent=4)
 
+    def ogrenci_ekle(self):
+        no = input("Öğrenci Numarası: ").strip()
+        ad = input("Öğrenci Adı Soyadı: ").strip()
+        if not no or not ad:
+            print("Numara veya ad boş bırakılamaz!")
+            return
+
+        try:
+            vize = float(input("Vize Notu (0-100): "))
+            final = float(input("Final Notu (0-100): "))
+            if not (0 <= vize <= 100 and 0 <= final <= 100):
+                print("Notlar 0 ile 100 arasında olmalıdır.")
+                return
+        except ValueError:
+            print("Hata: Not alanlarına sadece sayısal değer girmelisiniz!")
+            return
+
+        yeni_ogr = Ogrenci(no, ad, vize, final)
+        self.ogrenciler.append(yeni_ogr.to_dict())
+        self.dosyaya_kaydet()
+        print(f"{ad} başarıyla eklendi.")
+
+    def ogrencileri_listele(self):
+        if not self.ogrenciler:
+            print("Sistemde henüz kayıtlı öğrenci yok.")
+            return
+        print("\n--- ÖĞRENCİ LİSTESİ ---")
+        for o in self.ogrenciler:
+            print(f"No: {o['no']} | Ad: {o['ad']} | Ort: {o['ortalama']} | Durum: {o['durum']}")
+
+    def ogrenci_ara(self):
+        kriter = input("Aramak istediğiniz öğrenci adı veya numarası: ").strip().lower()
+        bulunanlar = [o for o in self.ogrenciler if kriter in o['ad'].lower() or kriter in o['no']]
+        if bulunanlar:
+            print(f"\nBulunan Kayıtlar ({len(bulunanlar)} adet):")
+            for o in bulunanlar:
+                print(f"No: {o['no']} | Ad: {o['ad']} | Vize: {o['vize']} | Final: {o['final']} | Ort: {o['ortalama']}")
+        else:
+            print("Eşleşen öğrenci bulunamadı.")
+
+    def ogrenci_sil(self):
+        no = input("Silinecek Öğrenci Numarası: ").strip()
+        onceki_sayi = len(self.ogrenciler)
+        self.ogrenciler = [o for o in self.ogrenciler if o['no'] != no]
+        if len(self.ogrenciler) < onceki_sayi:
+            self.dosyaya_kaydet()
+            print(f"{no} numaralı öğrenci silindi.")
+        else:
+            print("Bu numaraya ait öğrenci bulunamadı.")
 
 
 
